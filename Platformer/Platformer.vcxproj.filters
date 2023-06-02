@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{fd2eaffb-768f-4e43-bf66-24d23cc80410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{b0a467e9-6501-4fe6-9d06-ff3f2404d4cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{2f66c06f-2997-4f90-b582-4c71481c7b32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Core">
+      <UniqueIdentifier>{8e83e7ae-af7f-429f-9a01-631d3ef0b949}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Platformer.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Game\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="console.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core.h">
+      <Filter>Game\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
