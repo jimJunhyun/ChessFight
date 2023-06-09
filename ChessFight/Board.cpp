@@ -6,9 +6,19 @@ bool Board::IsValidPos(const POS& p)
     return p.x < BXSIZE&& p.x >= 0 && p.y < BYSIZE&& p.y >= 0 && (GetBoardCell(p) == nullptr || !GetBoardCell(p)->side);
 }
 
+bool Board::IsOccupiedByEnemy(const POS& p)
+{
+    return !GetBoardCell(p)->side;
+}
+
 void Board::Insert(Pieces& piece)
 {
     board[piece.p.y][piece.p.x] = &piece;
+}
+
+void Board::Remove(Pieces& piece)
+{
+    board[piece.p.y][piece.p.x] = nullptr;
 }
 
 vector<POS> Board::PredMove(Pieces& p)
@@ -16,38 +26,258 @@ vector<POS> Board::PredMove(Pieces& p)
     vector<POS> results;
     if (p.type == PIECETYPE::PAWN) {
         int dir = 1;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 1; i++)
         {
-            if (!p.side)
-                dir = -1;
-            POS predPos = POS{ p.p.x, p.p.y + i * dir };
-            if(GetBoardCell(predPos))
+            POS predPos = POS{ p.p.x, p.p.y + dir };
+
+            POS predAtkPosL = POS{ p.p.x - 1 , p.p.y + dir };
+            POS predAtkPosR = POS{ p.p.x + 1, p.p.y + dir };
+
+            if(IsValidPos(predAtkPosL) && IsOccupiedByEnemy(predAtkPosL))
+                results.push_back(predAtkPosL);
+            if (IsValidPos(predAtkPosR) && IsOccupiedByEnemy(predAtkPosR))
+                results.push_back(predAtkPosR);
+
+            if (IsValidPos(predPos)) {
+                results.push_back(predPos);
+            }
+            else
+               break;
+        }
+    }
+    if (p.type == PIECETYPE::KNIGHT) {
+        int xP = 1; //1 2 2 1 -1 -2 -2 -1
+        int yP = 2; //2 1 -1 -2 -2 -1 1 2
+        for (int i = 0; i < 8; i++)
+        {
+            switch (i)
+            {
+            case 0:
+                xP = 1;
+                yP = 2;
+                break;
+            case 1:
+                xP = 2;
+                yP = 1;
+                break;
+            case 2:
+                xP = 2;
+                yP = -1;
+                break;
+            case 3:
+                xP = 1;
+                yP = -2;
+                break;
+            case 4:
+                xP = -1;
+                yP = -2;
+                break;
+            case 5:
+                xP = -2;
+                yP = -1;
+                break;
+            case 6:
+                xP = -2;
+                yP = 1;
+                break;
+            case 7:
+                xP = -1;
+                yP = 2;
+                break;
+            }
+            POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+            if (IsValidPos(predPos)) {
+                results.push_back(predPos);
+            }
+            
+        }
+    }
+    if (p.type == PIECETYPE::BISHOP) {
+        int xP = 1;
+        int yP = 1;
+        for (int i = 0; i < 4; i++)
+        {
+            switch (i)
+            {
+            case 0:
+                xP = 1;
+                yP = 1;
+                break;
+            case 1:
+                xP = 1;
+                yP = -1;
+                break;
+            case 2:
+                xP = -1;
+                yP = -1;
+                break;
+            case 3:
+                xP = -1;
+                yP = 1;
+                break;
+            }
+            while (true) {
+                POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+                if (IsValidPos(predPos)) {
+                    results.push_back(predPos);
+                }
+                else
+                    break;
+                if (IsOccupiedByEnemy(predPos))
+                    break;
+            }
+            
+            
+        }
+    }
+    if (p.type == PIECETYPE::ROOK) {
+        int xP = 1;
+        int yP = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            switch (i)
+            {
+            case 0:
+                xP = 0;
+                yP = 1;
+                break;
+            case 1:
+                xP = 1;
+                yP = 0;
+                break;
+            case 2:
+                xP = 0;
+                yP = -1;
+                break;
+            case 3:
+                xP = -1;
+                yP = 0;
+                break;
+            }
+            while (true) {
+                POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+                if (IsValidPos(predPos)) {
+                    results.push_back(predPos);
+                }
+                else
+                    break;
+                if (IsOccupiedByEnemy(predPos))
+                    break;
+            }
+        }
+    }
+    if (p.type == PIECETYPE::QUEEN) {
+        int xP = 1;
+        int yP = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            switch (i)
+            {
+            case 0:
+                xP = 0;
+                yP = 1;
+                break;
+            case 1:
+                xP = 1;
+                yP = 1;
+                break;
+            case 2:
+                xP = 1;
+                yP = 0;
+                break;
+            case 3:
+                xP = 1;
+                yP = -1;
+                break;
+            case 4:
+                xP = 0;
+                yP = -1;
+                break;
+            case 5:
+                xP = -1;
+                yP = -1;
+                break;
+            case 6:
+                xP = -1;
+                yP = 0;
+                break;
+            case 7:
+                xP = -1;
+                yP = 1;
+                break;
+            }
+            while (true) {
+                POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+                if (IsValidPos(predPos)) {
+                    results.push_back(predPos);
+                }
+                else
+                    break;
+                if (IsOccupiedByEnemy(predPos))
+                    break;
+            }
+        }
+    }
+    if (p.type == PIECETYPE::KING) {
+        int xP = 1;
+        int yP = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            switch (i)
+            {
+            case 0:
+                xP = 0;
+                yP = 1;
+                break;
+            case 1:
+                xP = 1;
+                yP = 1;
+                break;
+            case 2:
+                xP = 1;
+                yP = 0;
+                break;
+            case 3:
+                xP = 1;
+                yP = -1;
+                break;
+            case 4:
+                xP = 0;
+                yP = -1;
+                break;
+            case 5:
+                xP = -1;
+                yP = -1;
+                break;
+            case 6:
+                xP = -1;
+                yP = 0;
+                break;
+            case 7:
+                xP = -1;
+                yP = 1;
+                break;
+            }
+            POS predPos = POS{ p.p.x + xP, p.p.y + yP };
             if (IsValidPos(predPos)) {
                 results.push_back(predPos);
             }
         }
     }
-    if (p.type == PIECETYPE::KNIGHT) {
 
-    }
-    if (p.type == PIECETYPE::BISHOP) {
-
-    }
-    if (p.type == PIECETYPE::ROOK) {
-
-    }
-    if (p.type == PIECETYPE::QUEEN) {
-
-    }
-    if (p.type == PIECETYPE::KING) {
-
-    }
-
-    //return new POS{0, 0};
+    return results;
 }
 
 void Board::Move(Pieces& move, POS p)
 {
+    Remove(move);
+    move.p = p;
+    if (IsOccupiedByEnemy(p)) {
+        //ÇÇ±ð±â.
+    }
+    else {
+        Insert(move);
+    }
 }
 
 void Board::InitSide(bool isWhite)

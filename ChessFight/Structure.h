@@ -1,5 +1,7 @@
 #pragma once
 
+#define BOSSHP			100
+
 typedef struct position {
 	int x;
 	int y;

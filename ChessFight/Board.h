@@ -17,7 +17,9 @@ public:
 	
 
 	bool IsValidPos(const POS& p);
+	bool IsOccupiedByEnemy(const POS& p);
 	void Insert(Pieces& piece);
+	void Remove(Pieces& piece);
 	vector<POS> PredMove(Pieces& p);
 	void Move(Pieces& move, POS p);
 	void InitSide(bool isWhite);
