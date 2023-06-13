@@ -8,42 +8,48 @@ bool Board::IsValidPos(const POS& p)
 
 bool Board::IsOccupiedByEnemy(const POS& p)
 {
-    return !GetBoardCell(p)->side;
+    return GetBoardCell(p) != nullptr && !GetBoardCell(p)->side;
 }
 
 void Board::Insert(Pieces& piece)
 {
     board[piece.p.y][piece.p.x] = &piece;
+    if(piece.side)
+        pieces.push_back(piece);
 }
 
 void Board::Remove(Pieces& piece)
 {
     board[piece.p.y][piece.p.x] = nullptr;
+    for (vector<Pieces>::iterator iter = pieces.begin(); iter != pieces.end(); iter++)
+    {
+        if (((*iter) == (piece))) {
+            pieces.erase(iter);
+            break;
+        }
+    }
 }
 
-vector<POS> Board::PredMove(Pieces& p)
+vector<POS> Board::PredMove(const Pieces& p)
 {
     vector<POS> results;
     if (p.type == PIECETYPE::PAWN) {
         int dir = 1;
-        for (int i = 0; i < 1; i++)
-        {
-            POS predPos = POS{ p.p.x, p.p.y + dir };
 
-            POS predAtkPosL = POS{ p.p.x - 1 , p.p.y + dir };
-            POS predAtkPosR = POS{ p.p.x + 1, p.p.y + dir };
+        POS predPos = POS{ p.p.x, p.p.y - dir };
 
-            if(IsValidPos(predAtkPosL) && IsOccupiedByEnemy(predAtkPosL))
-                results.push_back(predAtkPosL);
-            if (IsValidPos(predAtkPosR) && IsOccupiedByEnemy(predAtkPosR))
-                results.push_back(predAtkPosR);
+        POS predAtkPosL = POS{ p.p.x - 1 , p.p.y - dir };
+        POS predAtkPosR = POS{ p.p.x + 1, p.p.y - dir };
 
-            if (IsValidPos(predPos)) {
-                results.push_back(predPos);
-            }
-            else
-               break;
+        if(IsValidPos(predAtkPosL) && IsOccupiedByEnemy(predAtkPosL))
+            results.push_back(predAtkPosL);
+        if (IsValidPos(predAtkPosR) && IsOccupiedByEnemy(predAtkPosR))
+            results.push_back(predAtkPosR);
+
+        if (IsValidPos(predPos)) {
+            results.push_back(predPos);
         }
+        
     }
     if (p.type == PIECETYPE::KNIGHT) {
         int xP = 1; //1 2 2 1 -1 -2 -2 -1
@@ -85,7 +91,7 @@ vector<POS> Board::PredMove(Pieces& p)
                 yP = 2;
                 break;
             }
-            POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+            POS predPos = POS{ p.p.x + xP, p.p.y - yP };
             if (IsValidPos(predPos)) {
                 results.push_back(predPos);
             }
@@ -116,8 +122,9 @@ vector<POS> Board::PredMove(Pieces& p)
                 yP = 1;
                 break;
             }
+            POS predPos = p.p;
             while (true) {
-                POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+                predPos = POS{ predPos.x + xP, predPos.y - yP };
                 if (IsValidPos(predPos)) {
                     results.push_back(predPos);
                 }
@@ -154,8 +161,9 @@ vector<POS> Board::PredMove(Pieces& p)
                 yP = 0;
                 break;
             }
+            POS predPos = p.p;
             while (true) {
-                POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+                predPos = POS{ predPos.x + xP, predPos.y - yP };
                 if (IsValidPos(predPos)) {
                     results.push_back(predPos);
                 }
@@ -206,8 +214,9 @@ vector<POS> Board::PredMove(Pieces& p)
                 yP = 1;
                 break;
             }
+            POS predPos = p.p;
             while (true) {
-                POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+                predPos = POS{ predPos.x + xP, predPos.y - yP };
                 if (IsValidPos(predPos)) {
                     results.push_back(predPos);
                 }
@@ -258,7 +267,7 @@ vector<POS> Board::PredMove(Pieces& p)
                 yP = 1;
                 break;
             }
-            POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+            POS predPos = POS{ p.p.x + xP, p.p.y - yP };
             if (IsValidPos(predPos)) {
                 results.push_back(predPos);
             }
@@ -268,7 +277,7 @@ vector<POS> Board::PredMove(Pieces& p)
     return results;
 }
 
-void Board::Move(Pieces& move, POS p)
+void Board::Move(Pieces move, POS p)
 {
     Remove(move);
     move.p = p;
@@ -285,7 +294,7 @@ void Board::InitSide(bool isWhite)
     if (isWhite) {
         for (int x = 0; x < 8; x++)
         {
-            Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true)));
+            //Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
         }
         for (int x = 0; x < 8; x++)
         {

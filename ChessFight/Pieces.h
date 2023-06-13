@@ -77,7 +77,7 @@ public:
 
 	wchar_t GetSymbol();
 	void MoveTo(POS pos);
-	bool ShowPreview();
+	bool operator==(const Pieces& a) { return (this->p == a.p) && a.symbol == this->symbol; }
 private:
 	wchar_t symbol;
 	int maxHp;
@@ -85,4 +85,3 @@ private:
 	int atk;
 	int value;
 };
-

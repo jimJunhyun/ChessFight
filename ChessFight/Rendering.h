@@ -12,7 +12,9 @@ public:
 
 	void RenderStartScreen();
 	void EraseAll();
-	void RenderBoard(Pieces*  board[][BXSIZE]);
+	void RenderBoard(Pieces*  board[][BXSIZE], Pieces& curSel);
+	void RenderPreview(vector<POS> pres);
+	void RenderPreviewDetail(POS sel);
 
 private:
 	Rendering();

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Pieces.h"
+#include "Board.h"
 
 wchar_t Pieces::GetSymbol()
 {
@@ -9,9 +10,4 @@ wchar_t Pieces::GetSymbol()
 void Pieces::MoveTo(POS pos)
 {
 	p = pos;
-}
-
-bool Pieces::ShowPreview()
-{
-	return false;
 }

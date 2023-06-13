@@ -29,7 +29,7 @@ void Rendering::EraseAll()
 	system("cls");
 }
 
-void Rendering::RenderBoard(Pieces* board[][BXSIZE])
+void Rendering::RenderBoard(Pieces* board[][BXSIZE], Pieces& curSel)
 {
 	for (int y = 0; y < BYSIZE; ++y)
 	{
@@ -38,8 +38,14 @@ void Rendering::RenderBoard(Pieces* board[][BXSIZE])
 			SetCurPos(x * 4, y * 2);
 			wcout << L"式式式式";
 			SetCurPos(x * 4, y * 2 + 1);
-			if(board[y][x] != nullptr)
-				wcout << L"| " << board[y][x]->GetSymbol();
+			if (board[y][x] != nullptr) {
+				wcout << L"| ";
+				if (curSel == *board[y][x]) {
+					SetColor((int)COLOR::RED, (int)COLOR::BLACK);
+				}
+				wcout << board[y][x]->GetSymbol();
+				ResetColor();
+			}
 			else 
 				wcout << L"|  ";
 			
@@ -48,6 +54,25 @@ void Rendering::RenderBoard(Pieces* board[][BXSIZE])
 	}
 	wcout << endl;
 	wcout << L"式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式";
+}
+
+void Rendering::RenderPreview(vector<POS> pres)
+{
+	SetColor((int)COLOR::RED, (int)COLOR::BLACK);
+	for (int i = 0; i < pres.size(); ++i)
+	{
+		SetCurPos(pres[i].x * 4 + 2, pres[i].y * 2 + 1);
+		wcout << L"∞";
+	}
+	ResetColor();
+}
+
+void Rendering::RenderPreviewDetail(POS sel)
+{
+	SetColor((int)COLOR::WHITE, (int)COLOR::RED);
+	SetCurPos(sel.x * 4 + 2, sel.y * 2 + 1);
+	wcout << L"∞";
+	ResetColor();
 }
 
 

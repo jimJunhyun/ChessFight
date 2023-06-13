@@ -5,7 +5,13 @@
 typedef struct position {
 	int x;
 	int y;
+
+	bool operator==(const position& r) {
+		return this->x == r.x && this->y == r.y;
+	}
+
 } POS, * PPOS;
+
 
 enum class PIECETYPE {
 	NONE,
