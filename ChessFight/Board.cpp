@@ -14,7 +14,7 @@ bool Board::IsOccupiedByEnemy(const POS& p)
 void Board::Insert(Pieces& piece)
 {
     board[piece.p.y][piece.p.x] = &piece;
-    if(piece.side)
+    if (piece.side)
         pieces.push_back(piece);
 }
 
@@ -277,15 +277,15 @@ vector<POS> Board::PredMove(const Pieces& p)
     return results;
 }
 
-void Board::Move(Pieces move, POS p)
+void Board::Move(Pieces& move, POS p)
 {
-    Remove(move);
-    move.p = p;
     if (IsOccupiedByEnemy(p)) {
-        //ÇÇ±ð±â.
+        GetBoardCell(p)->Damage(move.GetAttack());
     }
     else {
-        Insert(move);
+        board[move.p.y][move.p.x] = nullptr;
+        move.p = p;
+        board[move.p.y][move.p.x] = &move;
     }
 }
 

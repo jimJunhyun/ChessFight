@@ -8,6 +8,7 @@ void Starter()
 
 	Rendering::GetInst()->RenderStartScreen();
 	while (!_kbhit());
+	_getch();
 	Rendering::GetInst()->EraseAll();
 	Board b;
 	b.InitSide(true);
@@ -23,7 +24,6 @@ void Starter()
 
 	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
 	Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
-	_getch();
 	while (true)
 	{
 		if (selectionMode) {
@@ -55,10 +55,11 @@ void Starter()
 					prevSpace = true;
 					Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
 					Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
-					b.Move(b.GetCurSelPieceAt(), b.GetCurSelDetail());
+					b.Move((b.GetCurSelPieceAt()), b.GetCurSelDetail());
 					selectionMode = false;
 					Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
 					Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+					b.ResetDetail();
 				}
 			}
 			else {
@@ -96,7 +97,7 @@ void Starter()
 					Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
 
 					b.SetDetail(b.PredMove(b.GetCurSelPieceAt()));
-					
+					b.ResetDetail();
 					Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
 					Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 				}

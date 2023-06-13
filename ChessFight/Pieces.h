@@ -74,10 +74,15 @@ public:
 	PIECETYPE type;
 
 	bool side;
+	
 
-	wchar_t GetSymbol();
 	void MoveTo(POS pos);
-	bool operator==(const Pieces& a) { return (this->p == a.p) && a.symbol == this->symbol; }
+	void Damage(int dam);
+
+	bool operator==(const Pieces& a) { return (this->p == a.p) && a.type == this->type; }
+
+	wchar_t GetSymbol() { return symbol; }
+	int GetAttack() { return atk; }
 private:
 	wchar_t symbol;
 	int maxHp;

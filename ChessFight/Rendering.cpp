@@ -29,7 +29,7 @@ void Rendering::EraseAll()
 	system("cls");
 }
 
-void Rendering::RenderBoard(Pieces* board[][BXSIZE], Pieces& curSel)
+void Rendering::RenderBoard( Pieces* board[][BXSIZE], const Pieces& curSel)
 {
 	for (int y = 0; y < BYSIZE; ++y)
 	{
@@ -40,7 +40,7 @@ void Rendering::RenderBoard(Pieces* board[][BXSIZE], Pieces& curSel)
 			SetCurPos(x * 4, y * 2 + 1);
 			if (board[y][x] != nullptr) {
 				wcout << L"| ";
-				if (curSel == *board[y][x]) {
+				if ((*board[y][x] == curSel)) {
 					SetColor((int)COLOR::RED, (int)COLOR::BLACK);
 				}
 				wcout << board[y][x]->GetSymbol();

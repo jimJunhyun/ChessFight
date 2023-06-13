@@ -13,6 +13,7 @@ public:
 			}
 		}
 		selIdx = 0;
+		selIdxDetail = 0;
 	}
 
 	
@@ -22,7 +23,7 @@ public:
 	void Insert(Pieces& piece);
 	void Remove(Pieces& piece);
 	vector<POS> PredMove(const Pieces& p);
-	void Move(Pieces move, POS p);
+	void Move(Pieces& move, POS p);
 	void InitSide(bool isWhite);
 
 	void SetDetail(vector<POS> val) { detailPos = val; }
@@ -30,10 +31,12 @@ public:
 	void SelectNext() { ++selIdx %= pieces.size(); }
 	void SelectPrev() { (selIdx += pieces.size() - 1) %= pieces.size(); }
 
+
+	void ResetDetail() { selIdxDetail = 0; }
 	void SelectNextDetail() { ++selIdxDetail %= detailPos.size(); }
 	void SelectPrevDetail() { (selIdxDetail += detailPos.size() - 1) %= detailPos.size(); }
 
-	inline Pieces* (*GetBoardInfo(void))[BXSIZE] {return board; }
+	inline Pieces* (*GetBoardInfo(void)) [BXSIZE] {return board; }
 	inline Pieces* GetBoardCell(const POS& p) { return board[p.y][p.x]; }
 	inline Pieces& GetCurSelPieceAt() { return pieces[selIdx]; }
 	inline const POS& GetCurSelDetail() { return detailPos[selIdxDetail]; }

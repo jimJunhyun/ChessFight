@@ -2,12 +2,17 @@
 #include "Pieces.h"
 #include "Board.h"
 
-wchar_t Pieces::GetSymbol()
-{
-	return symbol;
-}
-
 void Pieces::MoveTo(POS pos)
 {
 	p = pos;
+}
+
+void Pieces::Damage(int dam)
+{
+	curHp -= dam;
+	if (curHp <= 0) {
+		if (!side) {
+			//Å¬¸®¾î
+		}
+	}
 }
