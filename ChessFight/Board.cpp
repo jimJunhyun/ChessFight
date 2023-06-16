@@ -18,7 +18,7 @@ void Board::Insert(Pieces& piece)
         pieces.push_back(piece);
 }
 
-void Board::Remove(Pieces& piece)
+void Board::Remove(const Pieces& piece)
 {
     board[piece.p.y][piece.p.x] = nullptr;
     for (vector<Pieces>::iterator iter = pieces.begin(); iter != pieces.end(); iter++)
@@ -28,6 +28,10 @@ void Board::Remove(Pieces& piece)
             break;
         }
     }
+    if (pieces.empty()) {
+        //게임오버
+    }
+    SelectNext();
 }
 
 vector<POS> Board::PredMove(const Pieces& p)
@@ -35,20 +39,25 @@ vector<POS> Board::PredMove(const Pieces& p)
     vector<POS> results;
     if (p.type == PIECETYPE::PAWN) {
         int dir = 1;
+        if (p.p.y == 6)
+            dir = 2;
+        POS predAtkPosL = POS{ p.p.x - 1 , p.p.y - 1 };
+        POS predAtkPosR = POS{ p.p.x + 1, p.p.y - 1 };
 
-        POS predPos = POS{ p.p.x, p.p.y - dir };
-
-        POS predAtkPosL = POS{ p.p.x - 1 , p.p.y - dir };
-        POS predAtkPosR = POS{ p.p.x + 1, p.p.y - dir };
-
-        if(IsValidPos(predAtkPosL) && IsOccupiedByEnemy(predAtkPosL))
+        if (IsValidPos(predAtkPosL) && IsOccupiedByEnemy(predAtkPosL))
             results.push_back(predAtkPosL);
         if (IsValidPos(predAtkPosR) && IsOccupiedByEnemy(predAtkPosR))
             results.push_back(predAtkPosR);
-
-        if (IsValidPos(predPos)) {
-            results.push_back(predPos);
+        for (int i = 1; i <= dir; i++)
+        {
+            POS predPos = POS{ p.p.x, p.p.y - i };
+            if (IsValidPos(predPos) && !IsOccupiedByEnemy(predPos)) {
+                results.push_back(predPos);
+            }
         }
+        
+
+        
         
     }
     if (p.type == PIECETYPE::KNIGHT) {
@@ -280,13 +289,20 @@ vector<POS> Board::PredMove(const Pieces& p)
 void Board::Move(Pieces& move, POS p)
 {
     if (IsOccupiedByEnemy(p)) {
-        GetBoardCell(p)->Damage(move.GetAttack());
+        if (GetBoardCell(p)->Damage(move.GetAttack())) {
+            Remove(*GetBoardCell(p));
+        }
+        if (board[move.p.y][move.p.x]->Damage(GetBoardCell(p)->GetAttack())) {
+            Remove(move);
+        }
+
     }
     else {
         board[move.p.y][move.p.x] = nullptr;
         move.p = p;
         board[move.p.y][move.p.x] = &move;
     }
+    CheckPromotion();
 }
 
 void Board::InitSide(bool isWhite)
@@ -294,7 +310,7 @@ void Board::InitSide(bool isWhite)
     if (isWhite) {
         for (int x = 0; x < 8; x++)
         {
-            //Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
+            Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
         }
         for (int x = 0; x < 8; x++)
         {
@@ -327,5 +343,15 @@ void Board::InitSide(bool isWhite)
     }
     else {
         Insert(*(new Pieces(PIECETYPE::KING, POS{ 3, 0 }, false)));
+    }
+}
+
+void Board::CheckPromotion()
+{
+    for (int i = 0; i < BXSIZE; i++)
+    {
+        if (board[0][i] != nullptr && board[0][i]->type == PIECETYPE::PAWN) {
+            board[0][i]->SetType(PIECETYPE::QUEEN);
+        }
     }
 }

@@ -16,6 +16,8 @@ public:
 	void RenderPreview(vector<POS> pres);
 	void RenderPreviewDetail(POS sel);
 
+	void RenderBossHpBar(int amt);
+
 private:
 	Rendering();
 	~Rendering();

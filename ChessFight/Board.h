@@ -4,6 +4,7 @@
 class Board
 {
 public:
+
 	Board() {
 		for (int y = 0; y < BYSIZE; y++)
 		{
@@ -21,7 +22,7 @@ public:
 	bool IsValidPos(const POS& p);
 	bool IsOccupiedByEnemy(const POS& p);
 	void Insert(Pieces& piece);
-	void Remove(Pieces& piece);
+	void Remove(const Pieces& piece);
 	vector<POS> PredMove(const Pieces& p);
 	void Move(Pieces& move, POS p);
 	void InitSide(bool isWhite);
@@ -35,6 +36,8 @@ public:
 	void ResetDetail() { selIdxDetail = 0; }
 	void SelectNextDetail() { ++selIdxDetail %= detailPos.size(); }
 	void SelectPrevDetail() { (selIdxDetail += detailPos.size() - 1) %= detailPos.size(); }
+
+	void CheckPromotion();
 
 	inline Pieces* (*GetBoardInfo(void)) [BXSIZE] {return board; }
 	inline Pieces* GetBoardCell(const POS& p) { return board[p.y][p.x]; }

@@ -7,7 +7,7 @@ using namespace std;
 
 void Rendering::RenderStartScreen()
 {
-	HideCur(true, 10);
+	HideCur(true, 100);
 
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	wcout << L" _______  __   __  _______  _______  _______    _______  ___   _______  __   __  _______ \n";
@@ -62,7 +62,7 @@ void Rendering::RenderPreview(vector<POS> pres)
 	for (int i = 0; i < pres.size(); ++i)
 	{
 		SetCurPos(pres[i].x * 4 + 2, pres[i].y * 2 + 1);
-		wcout << L"○";
+		wcout << L"o";
 	}
 	ResetColor();
 }
@@ -71,7 +71,26 @@ void Rendering::RenderPreviewDetail(POS sel)
 {
 	SetColor((int)COLOR::WHITE, (int)COLOR::RED);
 	SetCurPos(sel.x * 4 + 2, sel.y * 2 + 1);
-	wcout << L"○";
+	wcout << L"o";
+	ResetColor();
+}
+
+void Rendering::RenderBossHpBar(int amt)
+{
+	SetCurPos(40, 5);
+	wcout << L"보스 체력 : ";
+	
+	for (int i = 0; i < BOSSHP / 10; i++)
+	{
+		if (i < amt / 10) {
+			SetColor((int)COLOR::RED, (int)COLOR::RED);
+			wcout << L"#";
+		}
+		else {
+			SetColor((int)COLOR::RED, (int)COLOR::GRAY);
+			wcout << L" ";
+		}
+	}
 	ResetColor();
 }
 

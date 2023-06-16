@@ -22,8 +22,12 @@ void Starter()
 
 	bool selectionMode = false;
 
+	bool turn = true;
+	int curnCnt = 0;
+
 	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
 	Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+	Rendering::GetInst()->RenderBossHpBar(BOSSHP);
 	while (true)
 	{
 		if (selectionMode) {
@@ -53,7 +57,8 @@ void Starter()
 			if ((GetAsyncKeyState(VK_SPACE) & 0x8000)) {
 				if (!prevSpace) {
 					prevSpace = true;
-					Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+					vector<POS> predPos = b.PredMove(b.GetCurSelPieceAt());
+					Rendering::GetInst()->RenderPreview(predPos);
 					Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 					b.Move((b.GetCurSelPieceAt()), b.GetCurSelDetail());
 					selectionMode = false;
@@ -95,11 +100,15 @@ void Starter()
 					prevSpace = true;
 					selectionMode = true;
 					Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
-
-					b.SetDetail(b.PredMove(b.GetCurSelPieceAt()));
-					b.ResetDetail();
-					Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
-					Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
+					vector<POS> predMoves = b.PredMove(b.GetCurSelPieceAt());
+					if (predMoves.size() > 0) {
+						b.SetDetail(predMoves);
+						b.ResetDetail();
+						Rendering::GetInst()->RenderPreview(predMoves);
+						Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
+					}
+					else
+						selectionMode = false;
 				}
 			}
 			else {

@@ -77,12 +77,14 @@ public:
 	
 
 	void MoveTo(POS pos);
-	void Damage(int dam);
+	bool Damage(int dam);
+	void SetType(PIECETYPE type);
 
 	bool operator==(const Pieces& a) { return (this->p == a.p) && a.type == this->type; }
 
 	wchar_t GetSymbol() { return symbol; }
 	int GetAttack() { return atk; }
+
 private:
 	wchar_t symbol;
 	int maxHp;
