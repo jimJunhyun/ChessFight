@@ -15,12 +15,14 @@ public:
 		}
 		selIdx = 0;
 		selIdxDetail = 0;
+
+		EnemyBoss = Pieces();
 	}
 
 	
 
-	bool IsValidPos(const POS& p);
-	bool IsOccupiedByEnemy(const POS& p);
+	bool IsValidPos(const POS& p, bool playerView = true);
+	bool IsOccupiedByEnemy(const POS& p, bool playerView = true);
 	void Insert(Pieces& piece);
 	void Remove(const Pieces& piece);
 	vector<POS> PredMove(const Pieces& p);
@@ -43,11 +45,13 @@ public:
 	inline Pieces* GetBoardCell(const POS& p) { return board[p.y][p.x]; }
 	inline Pieces& GetCurSelPieceAt() { return pieces[selIdx]; }
 	inline const POS& GetCurSelDetail() { return detailPos[selIdxDetail]; }
+	inline Pieces& GetEnemyBossAt() { return EnemyBoss; }
 	
 private:
 	int selIdx;
 	int selIdxDetail;
 	vector<Pieces> pieces;
+	Pieces EnemyBoss;
 	vector<POS> detailPos;
 	Pieces* board[BYSIZE][BXSIZE];
 };

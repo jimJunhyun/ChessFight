@@ -2,14 +2,14 @@
 #include "Board.h"
 #include "Rendering.h"
 
-bool Board::IsValidPos(const POS& p)
+bool Board::IsValidPos(const POS& p, bool playerView)
 {
-    return p.x < BXSIZE&& p.x >= 0 && p.y < BYSIZE&& p.y >= 0 && (GetBoardCell(p) == nullptr || !GetBoardCell(p)->side);
+    return p.x < BXSIZE&& p.x >= 0 && p.y < BYSIZE&& p.y >= 0 && (GetBoardCell(p) == nullptr || (playerView != GetBoardCell(p)->side));
 }
 
-bool Board::IsOccupiedByEnemy(const POS& p)
+bool Board::IsOccupiedByEnemy(const POS& p, bool playerView)
 {
-    return GetBoardCell(p) != nullptr && !GetBoardCell(p)->side;
+    return GetBoardCell(p) != nullptr && (playerView != GetBoardCell(p)->side);
 }
 
 void Board::Insert(Pieces& piece)
@@ -243,46 +243,62 @@ vector<POS> Board::PredMove(const Pieces& p)
     if (p.type == PIECETYPE::KING) {
         int xP = 1;
         int yP = 0;
-        for (int i = 0; i < 8; i++)
+        int minDist = INT_MAX;
+        for (int i = 0; i < pieces.size(); i++)
         {
-            switch (i)
-            {
-            case 0:
-                xP = 0;
-                yP = 1;
-                break;
-            case 1:
-                xP = 1;
-                yP = 1;
-                break;
-            case 2:
-                xP = 1;
-                yP = 0;
-                break;
-            case 3:
-                xP = 1;
-                yP = -1;
-                break;
-            case 4:
-                xP = 0;
-                yP = -1;
-                break;
-            case 5:
-                xP = -1;
-                yP = -1;
-                break;
-            case 6:
-                xP = -1;
-                yP = 0;
-                break;
-            case 7:
-                xP = -1;
-                yP = 1;
-                break;
+            int dist = abs(p.p.x - pieces[i].p.x) + abs(p.p.y - pieces[i].p.y);
+            if (minDist > dist) {
+                minDist = dist;
+                xP = p.p.x == pieces[i].p.x ? 0 : p.p.x > pieces[i].p.x ? -1 : 1;
+                yP = p.p.y == pieces[i].p.y ? 0 : p.p.y > pieces[i].p.y ? -1 : 1;
             }
-            POS predPos = POS{ p.p.x + xP, p.p.y - yP };
-            if (IsValidPos(predPos)) {
-                results.push_back(predPos);
+        }
+        POS predPos = POS{ p.p.x + xP, p.p.y + yP };
+        if (IsValidPos(predPos, false)) {
+            results.push_back(predPos);
+        }
+        else {
+            for (int i = 0; i < 8; i++)
+            {
+                switch (i)
+                {
+                case 0:
+                    xP = 0;
+                    yP = 1;
+                    break;
+                case 1:
+                    xP = 1;
+                    yP = 1;
+                    break;
+                case 2:
+                    xP = 1;
+                    yP = 0;
+                    break;
+                case 3:
+                    xP = 1;
+                    yP = -1;
+                    break;
+                case 4:
+                    xP = 0;
+                    yP = -1;
+                    break;
+                case 5:
+                    xP = -1;
+                    yP = -1;
+                    break;
+                case 6:
+                    xP = -1;
+                    yP = 0;
+                    break;
+                case 7:
+                    xP = -1;
+                    yP = 1;
+                    break;
+                }
+                POS predPos = POS{ p.p.x + xP, p.p.y - yP };
+                if (IsValidPos(predPos, false)) {
+                    results.push_back(predPos);
+                }
             }
         }
     }
@@ -292,10 +308,14 @@ vector<POS> Board::PredMove(const Pieces& p)
 
 void Board::Move(Pieces& move, POS p)
 {
-    if (IsOccupiedByEnemy(p)) {
+    if (IsOccupiedByEnemy(p, move.side)) {
         Pieces enemy = *GetBoardCell(p);
         if (GetBoardCell(p)->Damage(move.GetAttack())) {
             Remove(*GetBoardCell(p));
+
+            board[move.p.y][move.p.x] = nullptr;
+            move.p = p;
+            board[move.p.y][move.p.x] = &move;
         }
         if (board[move.p.y][move.p.x]->Damage(enemy.GetAttack())) {
             Remove(move);
@@ -314,9 +334,9 @@ void Board::InitSide(bool isWhite)
     if (isWhite) {
         for (int x = 0; x < 8; x++)
         {
-            //Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
+            Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
         }
-        for (int x = 0; x < 1; x++)
+        for (int x = 0; x < 8; x++)
         {
             PIECETYPE pType;
 
@@ -346,7 +366,8 @@ void Board::InitSide(bool isWhite)
         }
     }
     else {
-        Insert(*(new Pieces(PIECETYPE::KING, POS{ 3, 0 }, false)));
+        EnemyBoss = *(new Pieces(PIECETYPE::KING, POS{ 3, 0 }, false));
+        Insert(EnemyBoss);
     }
 }
 

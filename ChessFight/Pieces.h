@@ -7,6 +7,9 @@
 class Pieces
 {
 public:
+	Pieces() {
+		
+	}
 	Pieces(PIECETYPE type, POS pos, bool isWhite) {
 		this->type = type;
 		p = pos;
