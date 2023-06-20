@@ -11,6 +11,8 @@ public:
 	}
 
 	void RenderStartScreen();
+	void RenderEndScreen();
+	void RenderOverScreen();
 	void EraseAll();
 	void RenderBoard( Pieces* board[][BXSIZE], const Pieces& curSel);
 	void RenderPreview(vector<POS> pres);
@@ -18,9 +20,13 @@ public:
 
 	void RenderBossHpBar(int amt);
 
+	int GetEndFlag() { return end; }
+	void SetEndFlag(int val) { end = val; }
+
 private:
 	Rendering();
 	~Rendering();
 
+	int end;
 };
 

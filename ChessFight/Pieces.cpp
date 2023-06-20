@@ -15,7 +15,7 @@ bool Pieces::Damage(int dam)
 		Rendering::GetInst()->RenderBossHpBar(curHp);
 	if (curHp <= 0) {
 		if (!side) {
-			//클리어
+			Rendering::GetInst()->SetEndFlag(1);
 		}
 		
 		return true;

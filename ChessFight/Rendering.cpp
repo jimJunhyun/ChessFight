@@ -24,6 +24,38 @@ void Rendering::RenderStartScreen()
 	wcout << L"PRESS ANY KEY TO START\n";
 }
 
+void Rendering::RenderEndScreen()
+{
+	EraseAll();
+	wcout << L" _______  ___      _______  _______  ______    __ \n";
+	wcout << L"|       ||   |    |       ||   _   ||    _ |  |  |\n";
+	wcout << L"|       ||   |    |    ___||  |_|  ||   | ||  |  |\n";
+	wcout << L"|       ||   |    |   |___ |       ||   |_||_ |  |\n";
+	wcout << L"|      _||   |___ |    ___||       ||    __  ||__|\n";
+	wcout << L"|     |_ |       ||   |___ |   _   ||   |  | | __ \n";
+	wcout << L"|_______||_______||_______||__| |__||___|  |_||__|\n";
+	wcout << L"\n\n\n";
+	SetCurPos(24, 11);
+	wcout << L"축하합니다.\n";
+}
+
+void Rendering::RenderOverScreen()
+{
+	EraseAll();
+	wcout << L" _______  _______  __   __  _______    _______  __   __  _______  ______   \n";
+	wcout << L"|       ||   _   ||  |_|  ||       |  |       ||  | |  ||       ||    _ |  \n";
+	wcout << L"|    ___||  |_|  ||       ||    ___|  |   _   ||  |_|  ||    ___||   | ||  \n";
+	wcout << L"|   | __ |       ||       ||   |___   |  | |  ||       ||   |___ |   |_||_ \n";
+	wcout << L"|   ||  ||       ||       ||    ___|  |  |_|  ||       ||    ___||    __  |\n";
+	wcout << L"|   |_| ||   _   || ||_|| ||   |___   |       | |     | |   |___ |   |  | |\n";
+	wcout << L"|_______||__| |__||_|   |_||_______|  |_______|  |___|  |_______||___|  |_|\n";
+
+	wcout << L"\n\n\n";
+	SetCurPos(30, 11);
+	wcout << L"패배했습니다.\n";
+}
+
+
 void Rendering::EraseAll()
 {
 	system("cls");
@@ -93,7 +125,6 @@ void Rendering::RenderBossHpBar(int amt)
 	}
 	ResetColor();
 }
-
 
 
 Rendering::Rendering()

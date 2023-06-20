@@ -1,9 +1,4 @@
 #pragma once
 
 
-
-
-
-
-
 void Starter();

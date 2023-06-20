@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Board.h"
+#include "Rendering.h"
 
 bool Board::IsValidPos(const POS& p)
 {
@@ -24,14 +25,17 @@ void Board::Remove(const Pieces& piece)
     for (vector<Pieces>::iterator iter = pieces.begin(); iter != pieces.end(); iter++)
     {
         if (((*iter) == (piece))) {
-            pieces.erase(iter);
+            iter = pieces.erase(iter);
             break;
         }
     }
     if (pieces.empty()) {
-        //게임오버
+        Rendering::GetInst()->SetEndFlag(2);
     }
-    SelectNext();
+    else {
+        SelectNext();
+    }
+    
 }
 
 vector<POS> Board::PredMove(const Pieces& p)
@@ -289,13 +293,13 @@ vector<POS> Board::PredMove(const Pieces& p)
 void Board::Move(Pieces& move, POS p)
 {
     if (IsOccupiedByEnemy(p)) {
+        Pieces enemy = *GetBoardCell(p);
         if (GetBoardCell(p)->Damage(move.GetAttack())) {
             Remove(*GetBoardCell(p));
         }
-        if (board[move.p.y][move.p.x]->Damage(GetBoardCell(p)->GetAttack())) {
+        if (board[move.p.y][move.p.x]->Damage(enemy.GetAttack())) {
             Remove(move);
         }
-
     }
     else {
         board[move.p.y][move.p.x] = nullptr;
@@ -310,9 +314,9 @@ void Board::InitSide(bool isWhite)
     if (isWhite) {
         for (int x = 0; x < 8; x++)
         {
-            Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
+            //Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
         }
-        for (int x = 0; x < 8; x++)
+        for (int x = 0; x < 1; x++)
         {
             PIECETYPE pType;
 

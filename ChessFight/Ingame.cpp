@@ -25,10 +25,12 @@ void Starter()
 	bool turn = true;
 	int curnCnt = 0;
 
+	bool endGame = false;
+
 	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
 	Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
 	Rendering::GetInst()->RenderBossHpBar(BOSSHP);
-	while (true)
+	while (Rendering::GetInst()->GetEndFlag() == 0)
 	{
 		if (selectionMode) {
 			if ((GetAsyncKeyState(VK_LEFT) & 0x8000)) {
@@ -61,6 +63,8 @@ void Starter()
 					Rendering::GetInst()->RenderPreview(predPos);
 					Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 					b.Move((b.GetCurSelPieceAt()), b.GetCurSelDetail());
+					if (Rendering::GetInst()->GetEndFlag() == 2)
+						break;
 					selectionMode = false;
 					Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
 					Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
@@ -116,4 +120,11 @@ void Starter()
 			}
 		}
 	}
+	if (Rendering::GetInst()->GetEndFlag() == 1) {
+		Rendering::GetInst()->RenderEndScreen();
+	}
+	else {
+		Rendering::GetInst()->RenderOverScreen();
+	}
+	
 }
