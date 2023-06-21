@@ -16,16 +16,16 @@ void Board::Insert(Pieces& piece)
 {
     board[piece.p.y][piece.p.x] = &piece;
     if (piece.side)
-        pieces.push_back(piece);
+        pieces.push_back(&piece);
 }
 
 void Board::Remove(const Pieces& piece)
 {
     board[piece.p.y][piece.p.x] = nullptr;
-    for (vector<Pieces>::iterator iter = pieces.begin(); iter != pieces.end(); iter++)
+    for (vector<Pieces*>::iterator iter = pieces.begin(); iter != pieces.end(); iter++)
     {
-        if (((*iter) == (piece))) {
-            iter = pieces.erase(iter);
+        if ((*(*iter) == (piece))) {
+            pieces.erase(iter);
             break;
         }
     }
@@ -33,7 +33,7 @@ void Board::Remove(const Pieces& piece)
         Rendering::GetInst()->SetEndFlag(2);
     }
     else {
-        SelectNext();
+        
     }
     
 }
@@ -246,11 +246,11 @@ vector<POS> Board::PredMove(const Pieces& p)
         int minDist = INT_MAX;
         for (int i = 0; i < pieces.size(); i++)
         {
-            int dist = abs(p.p.x - pieces[i].p.x) + abs(p.p.y - pieces[i].p.y);
+            int dist = abs(p.p.x - (* pieces[i]).p.x) + abs(p.p.y - (*pieces[i]).p.y);
             if (minDist > dist) {
                 minDist = dist;
-                xP = p.p.x == pieces[i].p.x ? 0 : p.p.x > pieces[i].p.x ? -1 : 1;
-                yP = p.p.y == pieces[i].p.y ? 0 : p.p.y > pieces[i].p.y ? -1 : 1;
+                xP = p.p.x == (*pieces[i]).p.x ? 0 : p.p.x > (*pieces[i]).p.x ? -1 : 1;
+                yP = p.p.y == (*pieces[i]).p.y ? 0 : p.p.y > (*pieces[i]).p.y ? -1 : 1;
             }
         }
         POS predPos = POS{ p.p.x + xP, p.p.y + yP };

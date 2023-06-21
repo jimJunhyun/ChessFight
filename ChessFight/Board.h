@@ -33,6 +33,8 @@ public:
 
 	void SelectNext() { ++selIdx %= pieces.size(); }
 	void SelectPrev() { (selIdx += pieces.size() - 1) %= pieces.size(); }
+	void SelectFirst() { selIdx = 0; }
+	void SelectLast() { selIdx = pieces.size() - 1; }
 
 
 	void ResetDetail() { selIdxDetail = 0; }
@@ -43,14 +45,14 @@ public:
 
 	inline Pieces* (*GetBoardInfo(void)) [BXSIZE] {return board; }
 	inline Pieces* GetBoardCell(const POS& p) { return board[p.y][p.x]; }
-	inline Pieces& GetCurSelPieceAt() { return pieces[selIdx]; }
+	inline Pieces* GetCurSelPieceAt() { return pieces[selIdx]; }
 	inline const POS& GetCurSelDetail() { return detailPos[selIdxDetail]; }
 	inline Pieces& GetEnemyBossAt() { return EnemyBoss; }
 	
 private:
 	int selIdx;
 	int selIdxDetail;
-	vector<Pieces> pieces;
+	vector<Pieces*> pieces;
 	Pieces EnemyBoss;
 	vector<POS> detailPos;
 	Pieces* board[BYSIZE][BXSIZE];

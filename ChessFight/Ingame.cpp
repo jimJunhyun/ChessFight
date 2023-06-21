@@ -13,8 +13,8 @@ void Starter()
 	Board b;
 	b.InitSide(true);
 	b.InitSide(false);
-	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
-	Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+	Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 	
 	bool prevLeft = false;
 	bool prevRight = false;
@@ -27,8 +27,8 @@ void Starter()
 
 	bool endGame = false;
 
-	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
-	Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+	Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 	Rendering::GetInst()->RenderBossHpBar(BOSSHP);
 	while (Rendering::GetInst()->GetEndFlag() == 0)
 	{
@@ -38,7 +38,7 @@ void Starter()
 					if (!prevLeft) {
 						prevLeft = true;
 						b.SelectPrevDetail();
-						Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 						Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 					}
 
@@ -50,7 +50,7 @@ void Starter()
 					if (!prevRight) {
 						prevRight = true;
 						b.SelectNextDetail();
-						Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 						Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 					}
 				}
@@ -60,15 +60,15 @@ void Starter()
 				if ((GetAsyncKeyState(VK_SPACE) & 0x8000)) {
 					if (!prevSpace) {
 						prevSpace = true;
-						vector<POS> predPos = b.PredMove(b.GetCurSelPieceAt());
+						vector<POS> predPos = b.PredMove(*(b.GetCurSelPieceAt()));
 						Rendering::GetInst()->RenderPreview(predPos);
 						Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
-						b.Move((b.GetCurSelPieceAt()), b.GetCurSelDetail());
+						b.Move((*(b.GetCurSelPieceAt())), b.GetCurSelDetail());
 						if (Rendering::GetInst()->GetEndFlag() == 2)
 							break;
 						selectionMode = false;
-						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
-						Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 						b.ResetDetail();
 						turn = false;
 					}
@@ -82,8 +82,8 @@ void Starter()
 					if (!prevLeft) {
 						prevLeft = true;
 						b.SelectPrev();
-						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
-						Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 					}
 
 				}
@@ -94,8 +94,8 @@ void Starter()
 					if (!prevRight) {
 						prevRight = true;
 						b.SelectNext();
-						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
-						Rendering::GetInst()->RenderPreview(b.PredMove(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 					}
 				}
 				else {
@@ -105,8 +105,8 @@ void Starter()
 					if (!prevSpace) {
 						prevSpace = true;
 						selectionMode = true;
-						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
-						vector<POS> predMoves = b.PredMove(b.GetCurSelPieceAt());
+						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+						vector<POS> predMoves = b.PredMove(*(b.GetCurSelPieceAt()));
 						if (predMoves.size() > 0) {
 							b.SetDetail(predMoves);
 							b.ResetDetail();
@@ -126,7 +126,7 @@ void Starter()
 			vector<POS> p = b.PredMove(b.GetEnemyBossAt());
 			int idx = rand() % p.size();
 			b.Move(b.GetEnemyBossAt(), p[idx]);
-			Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), b.GetCurSelPieceAt());
+			Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
 			Sleep(1000);
 			turn = true;
 		}
