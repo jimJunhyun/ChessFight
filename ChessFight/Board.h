@@ -1,8 +1,6 @@
 #pragma once
 #include "Pieces.h"
 
-class Buttons;
-
 class Board
 {
 public:
@@ -33,27 +31,26 @@ public:
 
 	void SetDetail(vector<POS> val) { detailPos = val; }
 
+	void RefreshSelect() { selIdx %= pieces.size(); }
 	void SelectNext() { ++selIdx %= pieces.size(); }
 	void SelectPrev() { (selIdx += pieces.size() - 1) %= pieces.size(); }
 	void SelectFirst() { selIdx = 0; }
 	void SelectLast() { selIdx = pieces.size() - 1; }
 
 
-	void ResetDetail() { selIdxDetail = 0; }
+	void ResetDetail() { selIdxDetail = detailPos.size() - 1; }
 	void SelectNextDetail() { ++selIdxDetail %= detailPos.size(); }
 	void SelectPrevDetail() { (selIdxDetail += detailPos.size() - 1) %= detailPos.size(); }
 
 	void CheckPromotion();
-
-	void CreateButtonAt(const POS& p);
 
 	inline Pieces* (*GetBoardInfo(void)) [BXSIZE] {return board; }
 	inline Pieces* GetBoardCell(const POS& p) { return board[p.y][p.x]; }
 	inline Pieces* GetCurSelPieceAt() { return pieces[selIdx]; }
 	inline const POS& GetCurSelDetail() { return detailPos[selIdxDetail]; }
 	inline Pieces& GetEnemyBossAt() { return EnemyBoss; }
-	inline vector<Buttons*> GetAllButtons() { return allButtons; }
-	
+	//inline vector<Buttons*> GetAllButtons() { return allButtons; }
+	//vector<Buttons*> allButtons;
 private:
 	int selIdx;
 	int selIdxDetail;
@@ -62,6 +59,6 @@ private:
 	vector<POS> detailPos;
 	Pieces* board[BYSIZE][BXSIZE];
 
-	vector<Buttons*> allButtons;
+	
 };
 

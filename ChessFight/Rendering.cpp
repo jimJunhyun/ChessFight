@@ -94,16 +94,16 @@ void Rendering::RenderPreview(vector<POS> pres)
 	SetColor((int)COLOR::RED, (int)COLOR::BLACK);
 	for (int i = 0; i < pres.size(); ++i)
 	{
-		SetCurPos(pres[i].x * 4 + 2, pres[i].y * 2 + 1);
+		SetCurPos((pres[i]).x * 4 + 2, (pres[i]).y * 2 + 1);
 		wcout << L"o";
 	}
 	ResetColor();
 }
 
-void Rendering::RenderPreviewDetail(POS sel)
+void Rendering::RenderPreviewDetail(const POS& sel)
 {
 	SetColor((int)COLOR::WHITE, (int)COLOR::RED);
-	SetCurPos(sel.x * 4 + 2, sel.y * 2 + 1);
+	SetCurPos((sel).x * 4 + 2, (sel).y * 2 + 1);
 	wcout << L"o";
 	ResetColor();
 }
@@ -114,7 +114,7 @@ void Rendering::RenderButton(vector<Buttons*> buttons)
 	{
 		SetCurPos((* buttons[i]).GetPosition().x * 4 + 2, (*buttons[i]).GetPosition().y * 2 + 1);
 		SetColor((int)COLOR::GRAY, (int)COLOR::WHITE);
-		wcout << (*buttons[i]).GetIcon();
+  		wcout << (*buttons[i]).GetIcon();
 		ResetColor();
 	}
 }

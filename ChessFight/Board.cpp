@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Board.h"
 #include "Rendering.h"
-#include "Buttons.h"
 
 bool Board::IsValidPos(const POS& p, bool playerView)
 {
@@ -27,7 +26,6 @@ void Board::Remove(const Pieces& piece)
     {
         if ((*(*iter) == (piece))) {
             pieces.erase(iter);
-            delete *iter;
             break;
         }
     }
@@ -35,7 +33,7 @@ void Board::Remove(const Pieces& piece)
         Rendering::GetInst()->SetEndFlag(2);
     }
     else {
-        
+        RefreshSelect();
     }
     
 }
@@ -337,7 +335,7 @@ void Board::InitSide(bool isWhite)
     if (isWhite) {
         for (int x = 0; x < 8; x++)
         {
-            Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true))); //폰은 아직 문제가 좀 많음.
+            //Insert(*(new Pieces(PIECETYPE::PAWN, POS{ x, 6 }, true)));
         }
         for (int x = 0; x < 8; x++)
         {
@@ -384,8 +382,8 @@ void Board::CheckPromotion()
     }
 }
 
-void Board::CreateButtonAt(const POS& p)
-{
-    Buttons button = *(new Buttons(this, p, BUTTONTYPE::DAMAGETRAP));
-    allButtons.push_back(&button);
-}
+//void Board::CreateButtonAt(const POS& p)
+//{
+//    Buttons button = *(new Buttons(this, p, BUTTONTYPE::DAMAGETRAP));
+//    allButtons.push_back(&button);
+//}

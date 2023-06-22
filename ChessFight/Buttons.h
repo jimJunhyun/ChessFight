@@ -4,7 +4,7 @@ class Board;
 class Buttons
 {
 public:
-	Buttons(Board* board, const POS& pos, BUTTONTYPE type, int dam = 10);
+	Buttons(Board* board, const POS& pos, int type, int dam = 10);
 	~Buttons();
 
 

@@ -17,7 +17,7 @@ public:
 	void EraseAll();
 	void RenderBoard( Pieces* board[][BXSIZE], const Pieces& curSel);
 	void RenderPreview(vector<POS> pres);
-	void RenderPreviewDetail(POS sel);
+	void RenderPreviewDetail(const POS& sel);
 	void RenderButton(vector<Buttons*> buttons);
 
 	void RenderBossHpBar(int amt);

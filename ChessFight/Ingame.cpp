@@ -2,6 +2,7 @@
 #include "Rendering.h"
 #include "Ingame.h"
 #include "Board.h"
+#include "Buttons.h"
 
 void Starter()
 {
@@ -27,7 +28,16 @@ void Starter()
 
 	bool endGame = false;
 
+	vector<Buttons*> buttons;
+	POS btnPos = POS{ rand() % BXSIZE, rand() % BYSIZE };
+	while (b.GetBoardCell(btnPos) != nullptr) {
+		btnPos = POS{ rand() % BXSIZE, rand() % BYSIZE };
+	}
+	Buttons* btn = new Buttons(&b, btnPos, rand() % (int)BUTTONTYPE::MAX);
+	buttons.push_back(btn);
+
 	Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+	Rendering::GetInst()->RenderButton(buttons);
 	Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 	Rendering::GetInst()->RenderBossHpBar(BOSSHP);
 	while (Rendering::GetInst()->GetEndFlag() == 0)
@@ -39,6 +49,7 @@ void Starter()
 						prevLeft = true;
 						b.SelectPrevDetail();
 						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
+						Rendering::GetInst()->RenderButton(buttons);
 						Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 					}
 
@@ -51,6 +62,7 @@ void Starter()
 						prevRight = true;
 						b.SelectNextDetail();
 						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
+						Rendering::GetInst()->RenderButton(buttons);
 						Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 					}
 				}
@@ -67,10 +79,15 @@ void Starter()
 						if (Rendering::GetInst()->GetEndFlag() == 2)
 							break;
 						selectionMode = false;
+						
+
 						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderButton(buttons);
 						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 						b.ResetDetail();
+
 						turnCnt += 1;
+						
 					}
 				}
 				else {
@@ -83,6 +100,7 @@ void Starter()
 						prevLeft = true;
 						b.SelectPrev();
 						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderButton(buttons);
 						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 					}
 
@@ -95,6 +113,7 @@ void Starter()
 						prevRight = true;
 						b.SelectNext();
 						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
+						Rendering::GetInst()->RenderButton(buttons);
 						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 					}
 				}
@@ -109,8 +128,9 @@ void Starter()
 						vector<POS> predMoves = b.PredMove(*(b.GetCurSelPieceAt()));
 						if (predMoves.size() > 0) {
 							b.SetDetail(predMoves);
-							b.ResetDetail();
+							b.ResetDetail(); 
 							Rendering::GetInst()->RenderPreview(predMoves);
+							Rendering::GetInst()->RenderButton(buttons);
 							Rendering::GetInst()->RenderPreviewDetail(b.GetCurSelDetail());
 						}
 						else
@@ -126,12 +146,37 @@ void Starter()
 			vector<POS> p = b.PredMove(b.GetEnemyBossAt());
 			int idx = rand() % p.size();
 			b.Move(b.GetEnemyBossAt(), p[idx]);
-			Rendering::GetInst()->RenderButton(b.GetAllButtons())
+
+			if (turnCnt % 10 == 0) {
+				POS btnPos = POS{ rand() % BXSIZE, rand() % BYSIZE };
+				while (b.GetBoardCell(btnPos) != nullptr) {
+					btnPos = POS{ rand() % BXSIZE, rand() % BYSIZE };
+				}
+				Buttons* btn = new Buttons(&b, btnPos, rand() % (int)BUTTONTYPE::MAX);
+				buttons.push_back(btn); // ?
+			}
+
 			Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
-			Sleep(1000);
+			Rendering::GetInst()->RenderButton(buttons);
+
+
+			Sleep(500);
+
 			turnCnt += 1;
+			
 		}
-		b.CreateButtonAt({ 0, 0 });
+
+		
+
+		for (vector<Buttons*>::iterator iter = buttons.begin(); iter != buttons.end();)
+		{
+			if ((*iter)->CheckPieceOn()) {
+				iter = buttons.erase(iter);
+			}
+			else {
+				++iter;
+			}
+		}
 	}
 	if (Rendering::GetInst()->GetEndFlag() == 1) {
 		Rendering::GetInst()->RenderEndScreen();
