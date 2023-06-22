@@ -1,6 +1,8 @@
 #pragma once
 #include "Pieces.h"
 
+class Buttons;
+
 class Board
 {
 public:
@@ -43,11 +45,14 @@ public:
 
 	void CheckPromotion();
 
+	void CreateButtonAt(const POS& p);
+
 	inline Pieces* (*GetBoardInfo(void)) [BXSIZE] {return board; }
 	inline Pieces* GetBoardCell(const POS& p) { return board[p.y][p.x]; }
 	inline Pieces* GetCurSelPieceAt() { return pieces[selIdx]; }
 	inline const POS& GetCurSelDetail() { return detailPos[selIdxDetail]; }
 	inline Pieces& GetEnemyBossAt() { return EnemyBoss; }
+	inline vector<Buttons*> GetAllButtons() { return allButtons; }
 	
 private:
 	int selIdx;
@@ -56,5 +61,7 @@ private:
 	Pieces EnemyBoss;
 	vector<POS> detailPos;
 	Pieces* board[BYSIZE][BXSIZE];
+
+	vector<Buttons*> allButtons;
 };
 

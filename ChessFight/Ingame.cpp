@@ -22,8 +22,8 @@ void Starter()
 
 	bool selectionMode = false;
 
-	bool turn = true;
-	int curnCnt = 0;
+
+	int turnCnt = 1;
 
 	bool endGame = false;
 
@@ -32,7 +32,7 @@ void Starter()
 	Rendering::GetInst()->RenderBossHpBar(BOSSHP);
 	while (Rendering::GetInst()->GetEndFlag() == 0)
 	{
-		if (turn) { //내 턴
+		if (turnCnt % 3 != 0) { //내 턴
 			if (selectionMode) {
 				if ((GetAsyncKeyState(VK_LEFT) & 0x8000)) {
 					if (!prevLeft) {
@@ -70,7 +70,7 @@ void Starter()
 						Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
 						Rendering::GetInst()->RenderPreview(b.PredMove(*(b.GetCurSelPieceAt())));
 						b.ResetDetail();
-						turn = false;
+						turnCnt += 1;
 					}
 				}
 				else {
@@ -126,10 +126,12 @@ void Starter()
 			vector<POS> p = b.PredMove(b.GetEnemyBossAt());
 			int idx = rand() % p.size();
 			b.Move(b.GetEnemyBossAt(), p[idx]);
+			Rendering::GetInst()->RenderButton(b.GetAllButtons())
 			Rendering::GetInst()->RenderBoard(b.GetBoardInfo(), *(b.GetCurSelPieceAt()));
 			Sleep(1000);
-			turn = true;
+			turnCnt += 1;
 		}
+		b.CreateButtonAt({ 0, 0 });
 	}
 	if (Rendering::GetInst()->GetEndFlag() == 1) {
 		Rendering::GetInst()->RenderEndScreen();

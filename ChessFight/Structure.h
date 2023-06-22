@@ -14,13 +14,23 @@ typedef struct position {
 
 
 enum class PIECETYPE {
-	NONE,
+	NONE = -1,
 	PAWN,
 	ROOK,
 	KNIGHT,
 	BISHOP,
 	QUEEN,
 	KING
+};
+
+enum class BUTTONTYPE {
+	NONE = -1,
+
+	ATTACKBOSS,
+	DAMAGETRAP,
+
+
+	MAX
 };
 
 static const int BXSIZE = 8;

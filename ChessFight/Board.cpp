@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Board.h"
 #include "Rendering.h"
+#include "Buttons.h"
 
 bool Board::IsValidPos(const POS& p, bool playerView)
 {
@@ -26,6 +27,7 @@ void Board::Remove(const Pieces& piece)
     {
         if ((*(*iter) == (piece))) {
             pieces.erase(iter);
+            delete *iter;
             break;
         }
     }
@@ -309,7 +311,7 @@ vector<POS> Board::PredMove(const Pieces& p)
 void Board::Move(Pieces& move, POS p)
 {
     if (IsOccupiedByEnemy(p, move.side)) {
-        Pieces enemy = *GetBoardCell(p);
+        int enemyAtk = (*GetBoardCell(p)).GetAttack();
         if (GetBoardCell(p)->Damage(move.GetAttack())) {
             Remove(*GetBoardCell(p));
 
@@ -317,7 +319,7 @@ void Board::Move(Pieces& move, POS p)
             move.p = p;
             board[move.p.y][move.p.x] = &move;
         }
-        if (board[move.p.y][move.p.x]->Damage(enemy.GetAttack())) {
+        if (board[move.p.y][move.p.x]->Damage(enemyAtk)) {
             Remove(move);
         }
     }
@@ -326,7 +328,8 @@ void Board::Move(Pieces& move, POS p)
         move.p = p;
         board[move.p.y][move.p.x] = &move;
     }
-    CheckPromotion();
+    if(move.type == PIECETYPE::PAWN)
+        CheckPromotion();
 }
 
 void Board::InitSide(bool isWhite)
@@ -379,4 +382,10 @@ void Board::CheckPromotion()
             board[0][i]->SetType(PIECETYPE::QUEEN);
         }
     }
+}
+
+void Board::CreateButtonAt(const POS& p)
+{
+    Buttons button = *(new Buttons(this, p, BUTTONTYPE::DAMAGETRAP));
+    allButtons.push_back(&button);
 }

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Rendering.h"
 #include "Board.h"
+#include "Buttons.h"
 
 
 using namespace std;
@@ -105,6 +106,17 @@ void Rendering::RenderPreviewDetail(POS sel)
 	SetCurPos(sel.x * 4 + 2, sel.y * 2 + 1);
 	wcout << L"o";
 	ResetColor();
+}
+
+void Rendering::RenderButton(vector<Buttons*> buttons)
+{
+	for (int i = 0; i < buttons.size(); i++)
+	{
+		SetCurPos((* buttons[i]).GetPosition().x * 4 + 2, (*buttons[i]).GetPosition().y * 2 + 1);
+		SetColor((int)COLOR::GRAY, (int)COLOR::WHITE);
+		wcout << (*buttons[i]).GetIcon();
+		ResetColor();
+	}
 }
 
 void Rendering::RenderBossHpBar(int amt)

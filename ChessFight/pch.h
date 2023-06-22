@@ -9,6 +9,7 @@
 #include <conio.h>
 #include "Structure.h"
 #include <vector>
+#include <functional>
 
 using namespace std;
 

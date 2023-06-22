@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Buttons.cpp" />
     <ClCompile Include="ChessFight.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="Ingame.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Buttons.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="Ingame.h" />
     <ClInclude Include="pch.h" />

@@ -78,8 +78,6 @@ public:
 
 	bool side;
 	
-
-	void MoveTo(POS pos);
 	bool Damage(int dam);
 	void SetType(PIECETYPE type);
 

@@ -1,6 +1,7 @@
 #pragma once
 
 class Pieces;
+class Buttons;
 class Rendering
 {
 public:
@@ -17,6 +18,7 @@ public:
 	void RenderBoard( Pieces* board[][BXSIZE], const Pieces& curSel);
 	void RenderPreview(vector<POS> pres);
 	void RenderPreviewDetail(POS sel);
+	void RenderButton(vector<Buttons*> buttons);
 
 	void RenderBossHpBar(int amt);
 

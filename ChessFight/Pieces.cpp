@@ -3,10 +3,6 @@
 #include "Board.h"
 #include "Rendering.h"
 
-void Pieces::MoveTo(POS pos)
-{
-	p = pos;
-}
 
 bool Pieces::Damage(int dam)
 {
